@@ -1,0 +1,365 @@
+/*
+Theme Name: Printemps
+Theme URI: https://wordpress.org/themes/Printemps/
+Author: the printemps team
+Author URI: https://wordpress.org/
+Description: Built on a solidly designed foundation,
+Requires at least: 5.9
+Tested up to: 5.9
+Requires PHP: 5.6
+Version: 1.1
+License: GNU General Public License v2 or later
+License URI:
+Text Domain:
+
+*/
+html,body{
+	margin: 0;
+	padding: 0;
+}
+
+.printemps-nav{
+	background-color: white;
+	display:flex;
+	box-shadow: 0px 3px 3px rgba(0,0,0,0.3);
+	padding: 10px;
+	/*line-height: 90px;*/
+	height: 90px;
+	align-items: center;
+}
+
+.printemps-nav-right{
+	margin-right: 120px;
+}
+.navigation{
+	background-color: white;
+	/*padding:20px;*/
+	display: flex;
+}
+
+/*ul,li{*/
+/*	list-style-type: none;*/
+/*	display: inline-block;*/
+/*	text-decoration-line: none;*/
+/*}*/
+
+.navigation li{
+	/*min-width: 120px;*/
+	height: 90px;
+}
+
+/*#header li a{*/
+/*	color: dimgray;*/
+/*}*/
+/*#header li a:hover{*/
+/*	color: black;*/
+/*}*/
+
+
+
+#content{
+	padding: 20px;
+	min-height: 80vh;
+}
+
+#site-footer{
+	background-color: #0E0628;
+	color: white;
+	position: relative;
+	bottom: 0;
+	right: 0;
+	left: 0;
+}
+.footer-credits{
+	padding: 60px;
+	color: white;
+	/*height: 252px;*/
+}
+
+.footer-items{
+	display: flex;
+	justify-content: space-between;
+	overflow-y: hidden;
+	font-size: 1.25vw;
+}
+
+.footer-items h4{
+	font-weight: normal;
+	color: gray;
+	font-size: 1.25vw;
+}
+
+.footer-copyright{
+	font-size: 1.25vw;
+}
+.footer-copyright a{
+	color: white;
+}
+.entry img{
+	max-width: 100%;
+}
+
+.printemps-page-div h1,
+.printemps-page-div h2{
+	width: 100%;
+	text-align: center;
+	font-weight: normal;
+}
+
+.printemps-content img{
+	max-width: 100%;
+}
+
+/*publication*/
+.publications-top-bar,
+.contact-us-top-bar{
+	width: 100%;
+	height: 30vw;
+	position: relative;
+}
+
+.publications-top-bar h1,
+.contact-us-top-bar h1{
+	text-align: center;
+	color: white;
+	position: relative;
+	bottom: 50%;
+}
+
+.publications-top-bar img,
+.contact-us-top-bar img{
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.publications-header{
+	background-color: whitesmoke;
+	padding: 30px;
+	text-align: center;
+}
+
+.publications-content{
+	background-color: white;
+	padding: 20px;
+}
+
+.publications-header-btn{
+	background-color: black;
+	color: white;
+	border-radius: 36px;
+	border: black;
+}
+
+
+.post-publication{
+	display: flex;
+	margin-bottom: 40px;
+	margin-left: 50px;
+	margin-top: 40px;
+}
+
+.post-publication-img{
+	width: 326px;
+	height: 266px;
+	background-color: #D8D8D8;
+	margin-right: 20px;
+}
+
+.post-publication-right{
+	width: 60vw;
+}
+.post-publication-img img{
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.post-publication-content{
+	height: 120px;
+	overflow-y: hidden;
+}
+.publication-read-btn,
+.career-action-btn{
+	background-color: #00C1D4;
+	color: white;
+	border-radius: 36px;
+	border: #00C1D4;
+}
+
+.publication-button-groups{
+	text-align: center;
+}
+
+/*.publication-button-groups{*/
+/*	text-align: center;*/
+/*}*/
+/*career*/
+
+.career-div{
+	padding: 50px;
+}
+
+.career-card{
+	width: 55vw;
+	box-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+}
+
+.post-career{
+	border-radius: 10px;
+	box-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+	padding: 20px;
+	width: 50vw;
+}
+
+
+/*proudcts*/
+
+.products-div{
+	margin-top: 50px;
+}
+
+.products-content{
+	margin-top: 80px;
+}
+
+.post-product{
+	display: flex;
+}
+
+.post-product-img{
+	width: 50vw;
+	height: 35vw;
+}
+
+.post-product-img img{
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.post-product-content{
+	width: 50vw;
+	text-align: center;
+	padding: 80px;
+	height: 35vw;
+	overflow-y: hidden;
+}
+
+
+/*contact*/
+
+.contact-us-div{
+	padding: 50px;
+	margin-top: 80px;
+}
+.contact-card{
+	display: flex;
+	width: 100%;
+	padding: 0;
+	margin-top: 80px;
+}
+
+.contact-card .card-body{
+	width: 50%;
+	margin: 0;
+	display: inline-block;
+}
+.contact-card .card-img{
+	width: 50%;
+	margin: 0;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	top: 0;
+}
+.contact-card .card-img img{
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	-moz-border-radius-topright: 10px;
+	-moz-border-radius-bottomright: 10px;
+	border-bottom-right-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+.contact-send-btn{
+	background-color: #200A44;
+	color: white;
+	border-radius: 36px;
+	border: #200A44;
+}
+
+.contact-item{
+	display: flex;
+	justify-content: space-between;
+}
+.contact-item input{
+	width: 46%;
+}
+
+.btn-groups{
+	text-align: center;
+}
+
+
+/*solution*/
+
+.solution-div{
+	margin-top: 80px;
+}
+
+
+
+/*single detail */
+.printemps-post-style{
+	padding: 50px;
+}
+.printemps-content{
+	padding: 50px;
+}
+
+.printemps-content img{
+	max-width: 100%;
+	object-fit: cover;
+	text-align: center;
+}
+
+.printemps-content figure{
+	text-align: center;
+}
+
+.printemps-content p {
+	text-indent:4vw;
+}
+
+/*company*/
+
+.company-div{
+	padding: 50px;
+}
+
+.printemps-company-roles{
+	display: flex;
+	justify-content: space-around;
+}
+
+.company-role-item{
+	border: none;
+	text-align: center;
+}
+
+
+.company-role-item-img{
+	text-align: center;
+	height: 15vw;
+
+}
+
+.company-role-item-img img {
+	object-fit: cover;
+	width: 15vw;
+	height: 15vw;
+	border-radius: 50%;
+}
