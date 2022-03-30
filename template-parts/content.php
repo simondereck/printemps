@@ -280,6 +280,9 @@ $page = get_page($id);
                     <?php endforeach;?>
                 </div>
             </div>
+            <div class="contact-us-top-bar">
+                <img src="<?php echo get_template_directory_uri().'/assets/images/company.jpeg'; ?>" />
+            </div>
         </div>
     </div>
     <script>
@@ -313,3 +316,7 @@ $page = get_page($id);
         </div>
     </div>
 <?php endif; ?>
+
+<?php //if ( is_active_sidebar( 'printemps-footer' ) ) { ?>
+<!--    --><?php //dynamic_sidebar('printemps-footer'); ?>
+<?php //} ?>

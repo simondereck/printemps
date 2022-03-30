@@ -29,21 +29,8 @@
     <div class="collapse navbar-collapse content-align-right " id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto nav-flex-icons bg-white" >
             <?php
-            //            wp_list_pages();
-            $pages = get_pages();
-            foreach ($pages as $page) {
-                if ($page->post_title=="Contact Us"
-                    ||$page->post_title=="Publications"
-                    ||$page->post_title=="Career"
-                    ||$page->post_title=="Company"
-                    ||$page->post_title=="Solution"
-                    ||$page->post_title=="Products"
-                ){
-                    echo "<li class='nav-item'><a class='nav-link' href='?page_id=".$page->ID."'>".$page->post_title."</a></li>";
-                }
-            }
+                printemps_get_menus();
             ?>
-
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="/bussiness/platform" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     Lan
