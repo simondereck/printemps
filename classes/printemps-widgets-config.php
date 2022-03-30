@@ -4,7 +4,7 @@ function printemps_widgets(){
     printemps_admin_head();
     $widgets = null;
     $configs = printemps_read_widgets_config();
-
+    $item_detail = null;
     if ($_POST){
         $widgets = $_POST["widgets"] ?? "";
         $type = $_POST["type"] ?? "";
@@ -66,7 +66,16 @@ function printemps_widgets(){
                 $configs[$_POST["id"]] = $item;
             }
             printemps_update_widgets_config($configs);
+        }elseif ($type=="delete"){
+            unset($configs[$_POST["id"]]);
+            printemps_update_widgets_config($configs);
+        }elseif($type=="update"){
+
+        }elseif($type=="upgrade"){
+
         }
+
+        $item_detail = $configs[$_POST["id"]??0] ?? [];
     }
     ?>
         <h1>Printemps widgets setting</h1>
@@ -78,17 +87,17 @@ function printemps_widgets(){
                 </div>
                 <div>
                     <?php if ($widgets=="block_information"): ?>
-                        <?php printemps_block_information(); ?>
+                        <?php printemps_block_information($item_detail); ?>
                     <?php elseif ($widgets=="block_image"):?>
-                        <?php printemps_block_images(); ?>
+                        <?php printemps_block_images($item_detail); ?>
                     <?php elseif ($widgets=="post_list"):?>
-                        <?php printemps_post_lists();?>
+                        <?php printemps_post_lists($item_detail);?>
                     <?php elseif ($widgets=="post_five"):?>
-                        <?php printemps_post_five(); ?>
+                        <?php printemps_post_five($item_detail); ?>
                     <?php elseif ($widgets=="post_cross"):?>
-                        <?php printemps_post_cross(); ?>
+                        <?php printemps_post_cross($item_detail); ?>
                     <?php elseif ($widgets=="inline_icons"): ?>
-                        <?php printemps_inline_icon();?>
+                        <?php printemps_inline_icon($item_detail);?>
                     <?php else: ?>
                         <div style="margin-top: 20px;" class="alert alert-warning" role="alert">
                             <p>please select a widgets to design!</p>
@@ -122,7 +131,19 @@ function printemps_widgets(){
                         <div class="card" data-id="<?php echo $config["_id"] ?>">
                             <p>id: <?php echo $config["_id"] ?> </p>
                             <p>type: <?php echo $config["type"] ?></p>
-                            <button class="btn btn-success btn-sm">update</button>
+                            <div style="display: flex;justify-content: space-between;">
+                                <form method="post">
+                                    <input name="id"  value="<?php echo $config["_id"]?>" class="hidden"/>
+                                    <input name="widgets" value="<?php echo $config["type"]?>" class="hidden"/>
+                                    <input name="type" value="upgrade" class="hidden"/>
+                                    <button class="btn btn-success btn-sm" type="submit">update</button>
+                                </form>
+                                <form method="post">
+                                    <input name="id"  value="<?php echo $config["_id"]?>" class="hidden"/>
+                                    <input name="type" value="delete" class="hidden"/>
+                                    <button class="btn btn-danger btn-sm" style="margin-top: 5px;">delete</button>
+                                </form>
+                            </div>
                         </div>
                     <?php endforeach;?>
                 </div>
@@ -142,20 +163,22 @@ function printemps_widgets(){
 }
 
 
-function printemps_block_information(){
+function printemps_block_information($item){
     ?>
         <div style="padding: 30px;background-color: floralwhite;margin-top: 20px;">
             <form method="post" id="block_info_form">
                 <label>_ID (this id is for select in pages)</label>
-                <input name="id" class="form-control" required />
+                <input name="id" class="form-control" value="<?php echo $item["_id"] ?? "" ?>" required />
                 <label>Title</label>
-                <input name="title" class="form-control" required />
+                <input name="title" class="form-control" value="<?php echo $item["title"] ?? "" ?>" required />
                 <label>Description</label>
-                <textarea id="description" name="description" class="form-control" style="height: 15vw;" required></textarea>
+                <textarea id="description" name="description" class="form-control" style="height: 15vw;" required>
+                    <?php echo $item["description"] ?? "" ?>
+                </textarea>
                 <label>Background color</label>
-                <input type="color" name="background" value="#f0f0f0"/>
+                <input type="color" name="background"  value="<?php echo $item["background"]??"#f0f0f0"?>"/>
                 <label>Font color</label>
-                <input name="font" type="color" value="#00000"/>
+                <input name="font" type="color" value="<?php echo $item["font"]??"#000000"?>"/>
                 <input type="hidden" name="type" value="create" />
                 <input type="hidden" name="widgets" value="block_information" />
                 <div style="margin-top: 5px;">
@@ -189,19 +212,19 @@ function printemps_block_information(){
     <?php
 }
 
-function printemps_block_images(){
+function printemps_block_images($item){
     ?>
         <div style="padding: 30px;background-color: floralwhite;margin-top: 20px;">
             <form method="post">
                 <label>_ID (this id is for select in pages)</label>
-                <input name="id" class="form-control" required />
+                <input name="id" class="form-control" value="<?php echo $item["_id"] ?? "" ?>" required />
                 <label>Title</label>
-                <input name="title" class="form-control"  />
+                <input name="title" class="form-control" value="<?php echo $item["title"] ?? "" ?>" />
                 <label>Image</label>
-                <input name="image" class="form-control" required/>
+                <input name="image" class="form-control" value="<?php echo $item["image"] ?? "" ?>" required/>
                 <div style="margin-top: 5px;">
                     <label>Font color</label>
-                    <input name="font" type="color" value="#00000"/>
+                    <input name="font" type="color" value="<?php echo $item["font"] ?? "#00000"?>"/>
                 </div>
                 <input type="hidden" name="type" value="create" />
                 <input type="hidden" name="widgets" value="block_image" />
@@ -227,7 +250,7 @@ function printemps_block_images(){
 }
 
 
-function printemps_post_five(){
+function printemps_post_five($item){
     $categories = get_categories([
         'hide_empty'      => false,
     ]);
@@ -235,12 +258,16 @@ function printemps_post_five(){
         <div style="padding: 30px;background-color:floralwhite;margin-top: 20px;">
             <form method="post">
                 <label>_ID (this id is for select in pages)</label>
-                <input name="id" class="form-control" required />
+                <input name="id" class="form-control" required value="<?php echo $item["_id"] ?? "" ?>"/>
                 <label>Category</label>
                 <select name="category" class="form-control" required >
                     <option value="">--- select a category for datasouce ---</option>
                     <?php foreach ($categories as $category):?>
-                        <option value="<?php echo $category->name; ?>"><?php echo $category->name; ?></option>
+                        <?php if (isset($item["category"]) && $category->name==$item["category"]):?>
+                            <option value="<?php echo $category->name; ?>" selected><?php echo $category->name; ?></option>
+                        <?php else: ?>
+                            <option value="<?php echo $category->name; ?>" ><?php echo $category->name; ?></option>
+                        <?php endif; ?>
                     <?php endforeach;?>
                 </select>
                 <input type="hidden" name="type" value="create" />
@@ -295,7 +322,7 @@ function printemps_post_three_block(){
 
 }
 
-function printemps_post_lists(){
+function printemps_post_lists($item){
     $categories = get_categories([
         'hide_empty'      => false,
     ]);
@@ -304,20 +331,24 @@ function printemps_post_lists(){
         <div style="padding: 30px;background-color:floralwhite;margin-top: 20px;">
             <form method="post">
                 <label>_ID (this id is for select in pages)</label>
-                <input name="id" class="form-control" required />
+                <input name="id" class="form-control" value="<?php echo $item["_id"] ?>" required />
                 <label>Category</label>
                 <select name="category" class="form-control" required >
                     <option value="">--- select a category for datasouce ---</option>
                     <?php foreach ($categories as $category):?>
-                        <option value="<?php echo $category->name; ?>"><?php echo $category->name; ?></option>
+                        <?php if (isset($item["category"]) && $category->name==$item["category"]):?>
+                            <option value="<?php echo $category->name; ?>" selected><?php echo $category->name; ?></option>
+                        <?php else: ?>
+                            <option value="<?php echo $category->name; ?>" ><?php echo $category->name; ?></option>
+                        <?php endif; ?>
                     <?php endforeach;?>
                 </select>
                 <label>Button Font color</label>
-                <input type="color" class="form-control" name="font" value="#ffffff"/>
+                <input type="color" class="form-control" name="font" value="<?php echo $item["font"] ?? "#ffffff" ?>" />
                 <label>Button color</label>
-                <input type="color" class="form-control" value="#00C1D4" name="background" />
+                <input type="color" class="form-control" value="<?php echo $item["background"] ?? "#00C1D4"?>" name="background" />
                 <label>Button text</label>
-                <input class="form-control" value="read" name="title" required />
+                <input class="form-control" value="<?php echo $item["title"] ?? "Read" ?>" name="title" required />
                 <input type="hidden" name="type" value="create" />
                 <input type="hidden" name="widgets" value="post_list" />
                 <div style="margin-top: 5px;">
@@ -353,7 +384,6 @@ function printemps_post_lists(){
                 const title = $("input[name=title]").val();
                 $(".printemps-post-list-read-btn").each(function () {
                     $(this).text(title);
-                    console.log(title);
                 });
                 const item = $("#posts-list-demo").html();
                 var style = '<style>' +
@@ -371,7 +401,7 @@ function printemps_post_lists(){
     <?php
 }
 
-function printemps_post_cross(){
+function printemps_post_cross($item){
     $categories = get_categories([
         'hide_empty'      => false,
     ]);
@@ -380,12 +410,16 @@ function printemps_post_cross(){
     <div style="padding: 30px;background-color:floralwhite;margin-top: 20px;">
         <form method="post">
             <label>_ID (this id is for select in pages)</label>
-            <input name="id" class="form-control" required />
+            <input name="id" class="form-control" required value="<?php echo $item["_id"] ?? "" ?>"/>
             <label>Category</label>
             <select name="category" class="form-control" required >
                 <option value="">--- select a category for datasouce ---</option>
                 <?php foreach ($categories as $category):?>
-                    <option value="<?php echo $category->name; ?>"><?php echo $category->name; ?></option>
+                    <?php if (isset($item["category"]) && $category->name==$item["category"]):?>
+                        <option value="<?php echo $category->name; ?>" selected><?php echo $category->name; ?></option>
+                    <?php else: ?>
+                        <option value="<?php echo $category->name; ?>" ><?php echo $category->name; ?></option>
+                    <?php endif; ?>
                 <?php endforeach;?>
             </select>
             <input type="hidden" name="type" value="create" />
@@ -446,7 +480,7 @@ function printemps_modal_set(){
 }
 
 
-function printemps_inline_icon(){
+function printemps_inline_icon($item){
     //images
     //url
     $content = '<div>
@@ -462,17 +496,22 @@ function printemps_inline_icon(){
         <div style="padding: 30px;background-color:floralwhite;margin-top: 20px;">
             <form method="post">
                 <label>_ID (this id is for select in pages)</label>
-                <input name="id" class="form-control" required />
+                <input name="id" class="form-control" required value="<?php echo $item["_id"] ?? "" ?>"/>
                 <label>Title</label>
-                <input name="title" class="form-control" />
+                <input name="title" class="form-control" value="<?php echo $item["title"] ?? "" ?>"/>
                 <label>Background color</label>
-                <input type="color" name="background" value="#f0f0f0"/>
+                <input type="color" name="background" value="<?php echo $item["background"] ?? "#f0f0f0" ?>"/>
                 <label>Font color</label>
-                <input name="font" type="color" value="#00000"/>
+                <input name="font" type="color" value="<?php echo $item["font"] ?? "#00000" ?>"/>
                 <label>Image type</label>
                 <select name="image" class="form-control select-image-type">
-                    <option value="round" selected>round</option>
-                    <option value="square">square</option>
+                    <?php if (isset($item["image_type"])&&$item["image_type"]=="square"):?>
+                        <option value="round">round</option>
+                        <option value="square" selected>square</option>
+                    <?php else:?>
+                        <option value="round" selected>round</option>
+                        <option value="square">square</option>
+                    <?php endif; ?>
                 </select>
                 <div id="add-items">
 
