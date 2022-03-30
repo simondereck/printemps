@@ -652,10 +652,10 @@ function printemps_get_image_block($config){
 }
 
 function printemps_get_post_five($config){
-//    "category"=>$_POST["category"],
     $category = $config["category"];
+    $cid = get_cat_ID($category);
     $category_query_args = array(
-        'cat' => $category,
+        'cat' => $cid,
         "numberposts"=>5
     );
     $category_query = new WP_Query($category_query_args);
@@ -699,8 +699,9 @@ function printemps_get_post_five($config){
 
 function printemps_get_post_list($config){
     $category = $config["category"];
+    $cid = get_cat_ID($category);
     $category_query_args = array(
-        'cat' => $category,
+        'cat' => $cid,
     );
     $category_query = new WP_Query($category_query_args);
     $posts = $category_query->posts;
@@ -718,7 +719,7 @@ function printemps_get_post_list($config){
                     <p class="printemps-post-list-content">
                         <?php printemps_get_post_description($post->post_content); ?>
                     </p>
-                    <a class="btn btn-info printemps-post-list-read-btn" href="?p=<?php echo $post->ID;?>"><?php echo $config["title"] ?></a>
+                    <a class="btn btn-info printemps-post-list-read-btn" href="?p=<?php echo $post->ID;?>"><?php echo $config["title"]??"Read" ?></a>
                 </div>
             </div>
         <?php endforeach;?>
@@ -738,8 +739,9 @@ function printemps_get_post_list($config){
 
 function printemps_get_post_cross($config){
     $category = $config["category"];
+    $cid = get_cat_ID($category);
     $category_query_args = array(
-        'cat' => $category,
+        'cat' => $cid,
     );
     $category_query = new WP_Query($category_query_args);
     $posts = $category_query->posts;
@@ -782,7 +784,7 @@ function printemps_get_post_cross($config){
 }
 
 
-function printemps_inline_icons($config){
+function printemps_get_inline_icons($config){
     $title = $config["title"] ?? "";
     $background = $config["background"] ?? "white";
     $font = $config["font"] ?? "black";
@@ -814,7 +816,47 @@ function printemps_inline_icons($config){
 }
 
 function printemps_get_page($configs){
+    printemps_get_nav();
+    $items_config = $configs["config"];
+    if ($items_config && count($items_config)>0){
+        foreach ($items_config as $item){
+            if ($item["type"]=="block_information"){
+                printemps_get_information_block($item);
+            }elseif($item["type"]=="block_image"){
+                printemps_get_image_block($item);
+            }elseif($item["type"]=="post_list"){
+                printemps_get_post_list($item);
+            }elseif($item["type"]=="post_cross"){
+                printemps_get_post_cross($item);
+            }elseif($item["type"]=="post_five"){
+                printemps_get_post_five($item);
+            }elseif($item["type"]=="inline_icons"){
+                printemps_get_inline_icons($item);
+            }
+        }
+    }
+    printemps_get_footer();
+}
 
+function printemps_get_page_front($configs){
+    $items_config = $configs["config"];
+    if ($items_config && count($items_config)>0){
+        foreach ($items_config as $item){
+            if ($item["type"]=="block_information"){
+                printemps_get_information_block($item);
+            }elseif($item["type"]=="block_image"){
+                printemps_get_image_block($item);
+            }elseif($item["type"]=="post_list"){
+                printemps_get_post_list($item);
+            }elseif($item["type"]=="post_cross"){
+                printemps_get_post_cross($item);
+            }elseif($item["type"]=="post_five"){
+                printemps_get_post_five($item);
+            }elseif($item["type"]=="inline_icons"){
+                printemps_get_inline_icons($item);
+            }
+        }
+    }
 }
 
 

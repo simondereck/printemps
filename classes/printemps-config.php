@@ -547,41 +547,99 @@ function printemps_page(){
     $menus = printemps_read_config("menus");
     $widgets = printemps_read_widgets_config();
     $pages = printemps_read_pages_config();
-
+//    printdump($pages);
+    $select_key = 0;
+    if ($_POST){
+//        printdump($_POST);
+        $items = $_POST["items"];
+        $select_key = $key = $_POST["key"];
+        $configs = [];
+        foreach ($items as $item){
+            $configs[] = $widgets[$item];
+        }
+        $title = $menus[$key]["title"];
+        $pages[$title]["config"] = $configs;
+        $pages[$title]["link"] = $menus[$key]["link"];
+        $pages[$title]["title"] = $title;
+        $pages[$title]["page"] = $menus[$key]["page"];
+        printemps_update_pages_config($pages);
+    }
     ?>
-    <h1>Pages setting</h1>
+    <div style="display: flex;justify-content: space-between;align-items: center;padding: 20px;">
+            <h1>Pages setting</h1>
+            <button class="btn btn-success btn-lg">save</button>
+    </div>
+
     <nav>
       <div class="nav nav-tabs" id="nav-tab" role="tablist">
         <?php foreach ($menus as $key=>$menu):?>
-            <a class="nav-link" id="nav-tab-<?php echo $key;?>" data-toggle="tab" href="#nav-<?php echo $key;?>" role="tab" aria-controls="nav-<?php echo $key;?>" aria-selected="false"><?php echo $menu["title"]?></a>
+            <a class="nav-link <?php echo $select_key==$key?"active":"" ?>" id="nav-tab-<?php echo $key;?>" data-toggle="tab" href="#nav-<?php echo $key;?>" role="tab" aria-controls="nav-<?php echo $key;?>" aria-selected="<?php echo $key==$select_key ?>"><?php echo $menu["title"]?></a>
         <?php endforeach;?>
       </div>
     </nav>
     <div class="tab-content" id="nav-tabContent">
          <?php foreach ($menus as $key=>$menu): ?>
-              <div class="tab-pane fade" id="nav-<?php echo $key?>" role="tabpanel" aria-labelledby="nav-tab-<?php echo $key?>">
+              <div class="tab-pane fade <?php echo $select_key==$key?"show active":"" ?>" id="nav-<?php echo $key?>" role="tabpanel" aria-labelledby="nav-tab-<?php echo $key?>">
                     <?php if ($menu["link"]): ?>
                         <div>this page is a kink page link to <a href="<?php echo $menu["link"] ?>"></a></div>
                     <?php else: ?>
                         <div class="row">
-                            <div class="col-9">
-                                <?php printemps_get_nav(); ?>
-                                <?php printemps_get_footer(); ?>
+                            <div class="col-9" style="padding: 20px;">
+                                <?php printemps_get_page($pages[$menu["title"]] ?? []);?>
                             </div>
-                            <div class="col-3" style="height: 80vh;overflow-y: scroll;">
-                                <?php foreach ($widgets as $widgt_key => $widget_value): ?>
-                                    <div class="card" data-id="<?php echo $widgt_key; ?>">
-                                        <h4><?php echo $widgt_key; ?></h4>
-                                        <text><?php echo $widget_value["type"] ?></text>
-                                    </div>
-                                <?php endforeach; ?>
+                            <div class="col-3">
+                                <div class="config-setting-<?php echo $key ?>" style="background-color: floralwhite; padding: 20px;">
+                                    put data to this and then get all
+                                    <form method="post" id="config-page-<?php echo $key ?>">
+                                        <input name="key" value="<?php echo $key ?>" class="hidden"/>
+                                        <?php if($pages[$menu["title"]]): ?>
+                                            <?php foreach ($pages[$menu["title"]]["config"] as $page_config_key => $page_config): ?>
+                                                <input name="items[<?php echo $page_config_key; ?>]" value="<?php echo $page_config["_id"]?>" class="hidden"/>
+                                            <?php endforeach;?>
+                                        <?php endif;?>
+                                    </form>
+                                     <?php if($pages[$menu["title"]]): ?>
+                                        <?php foreach ($pages[$menu["title"]]["config"] as  $page_config): ?>
+                                            <div class="card">
+                                                <h8><?php echo $page_config["_id"]; ?></h8>
+                                            </div>
+                                        <?php endforeach;?>
+                                    <?php endif;?>
+                                </div>
+                                <div style="height: 80vh;overflow-y: scroll;padding: 20px; background-color: darkcyan;">
+                                    <?php foreach ($widgets as $widget_key => $widget_value): ?>
+                                        <div class="card" data-id="<?php echo $widget_key; ?>" data-key="<?php echo $key ?>">
+                                            <h8><?php echo $widget_key; ?></h8>
+                                            <h11><?php echo $widget_value["type"] ?></h11>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
                         </div>
                     <?php endif; ?>
               </div>
         <?php endforeach;?>
     </div>
+    <style>
+        .card{
+            cursor: pointer;
+        }
+        .card:hover{
+            box-shadow: 6px 6px 6px rgba(0,0,0,0.3);
+        }
+    </style>
     <script>
+        $(function() {
+            $(".card").click(function() {
+                var $id = $(this).attr("data-id");
+                var $key = $(this).attr("data-key");
+                $(".config-setting-"+$key).append($(this).clone());
+                var inputs = $("#config-page-"+$key).find("input");
+                var $config = "<input name='items["+inputs.length+"]' value='"+$id+"' class='hidden'/>";
+                $("#config-page-"+$key).append($config);
+                $("#config-page-"+$key).submit();
+            });
+        })
 
     </script>
     <?php

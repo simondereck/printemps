@@ -22,10 +22,11 @@ function printemps_widgets(){
                 $configs[$_POST["id"]] = $item;
             }elseif($widgets=="block_image"){
                 $item = [
-                  "type"=>"block_image",
-                  "_id"=>$_POST["id"],
-                  "font"=>$_POST["font"],
-                  "title"=>$_POST["title"],
+                    "type"=>"block_image",
+                    "_id"=>$_POST["id"],
+                    "font"=>$_POST["font"],
+                    "title"=>$_POST["title"],
+                    "image"=>$_POST["image"],
                 ];
                 $configs[$_POST["id"]] = $item;
             }elseif($widgets=="post_list"){
@@ -35,6 +36,7 @@ function printemps_widgets(){
                     "font"=>$_POST["font"],
                     "background"=>$_POST["background"],
                     "category"=>$_POST["category"],
+                    "title"=>$_POST["title"],
                 ];
                 $configs[$_POST["id"]] = $item;
             }elseif($widgets=="post_cross"){
